@@ -106,14 +106,18 @@ paths:
           
 definitions:
   Student:
-    type: "object"
-    required:
-    - "name"
+    type: object
     properties:
       id:
-        type: "integer"
-        format: "int64"
+        type: integer
+        format: int32
       name:
-        type: "string"
-        example: "John"
+        type: string
+        example: John Doe
+      courses:
+        type: array
+        description: 'IDs of courses taken by student'
+        items:
+          type: integer
+          format: int32
         
