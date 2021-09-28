@@ -1,0 +1,119 @@
+swagger: "2.0"
+info:
+  description: "Test server for ITU Information"
+  version: "1.0"
+  title: "ITU Super API"
+host: "itusuperapi.swagger.io"
+tags:
+ - name: "student"
+   description: "Information about the student goes here"
+ - name: "teacher"
+   description: "Information about the teacher goes here"
+ - name: "course"
+   description: "Information about the course goes here"
+schemes: 
+ - "http"
+paths:
+  /student:
+    post:
+      tags:
+      - "student"
+      summary: "Add a new student"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Student object that should be added to the system"
+        required: true
+        schema:
+          $ref: "#/definitions/Student"
+      responses: 
+        "405":
+          description: "Invalid input"
+  /student/{student_id}:
+    get:
+      tags:
+      - "student"
+      summary: "Find student by ID"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        description: "ID of student to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Student found!"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Student not found"
+  /teacher:
+    post:
+      tags:
+      - "teacher"
+      summary: "Add a new teacher"
+      responses: 
+        "405":
+          description: "Invalid input"
+  /teacher/{teacher_id}:
+    get:
+      tags:
+      - "teacher"
+      summary: "Find teacher by ID"
+      parameters:
+      - name: "teacher_id"
+        in: "path"
+        description: "ID of teacher to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Teacher found!"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Teacher not found"
+  /course:
+    post:
+      tags:
+      - "course"
+      summary: "Add a new course"
+      responses: 
+        "405":
+          description: "Invalid input"
+  /course/{course_id}:
+    get:
+      tags:
+      - "course"
+      summary: "Find course by ID"
+      parameters:
+      - name: "course_id"
+        in: "path"
+        description: "ID of course to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Course found!"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Course not found"
+          
+          
+definitions:
+  Student:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        example: "John"
+        
