@@ -19,6 +19,11 @@ paths:
       tags:
       - "student"
       summary: "Add a new student"
+      operationId: "addStudent"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
       parameters:
       - in: "body"
         name: "body"
@@ -33,7 +38,11 @@ paths:
     get:
       tags:
       - "student"
-      summary: "Find student by ID"
+      summary: "Returns information about the student"
+      description: "Returns a student object from its ID"
+      operationId: "getStudentByID"
+      produces:
+      - "application/json"
       parameters:
       - name: "student_id"
         in: "path"
@@ -44,12 +53,124 @@ paths:
       responses:
         "200":
           description: "Student found!"
+          schema: 
+            $ref: "#/definitions/Student"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Student not found"
+          
+    delete:
+      tags:
+      - "student"
+      summary: "Deletes a student"
+      description: ""
+      operationId: "deleteStudent"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        description: "Student ID to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Student not found"
+  /student/{student_id}/workload:
+    get:
+      tags:
+      - "student"
+      summary: "Find workload by student ID"
+      description: ""
+      operationId: "getWorkload"
+      produces: 
+      - "application/json"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Workload found!"
           schema:
             $ref: "#/definitions/Student"
         "400":
           description: "Invalid ID supplied"
         "404":
           description: "Student not found"
+  /student/{student_id}/{course_id}:
+    get:
+      tags:
+      - "student"
+      summary: "Find satisfaction ratings for the course"
+      description: ""
+      operationId: "getCourseRating"
+      produces: 
+      - "application/json"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "course_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Rating found!"
+          schema:
+            $ref: "#/definitions/CourseRating"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Course not found"
+    put:
+      tags:
+      - "student"
+      summary: "Update rating for course"
+      description: ""
+      operationId: "updateRating"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "course_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Updated course rating"
+        required: true
+        schema:
+          $ref: "#/definitions/CourseRating"
+        
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Course not found"
+      
+          
+          
+          
+          
   /teacher:
     post:
       tags:
@@ -122,6 +243,10 @@ definitions:
         items:
           type: integer
           format: int32
+      workload:
+        type: integer
+        format: int32
+        
   Teacher:
     type: object
     properties:
