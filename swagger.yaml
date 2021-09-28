@@ -44,6 +44,8 @@ paths:
       responses:
         "200":
           description: "Student found!"
+          schema:
+            $ref: "#/definitions/Student"
         "400":
           description: "Invalid ID supplied"
         "404":
@@ -120,4 +122,61 @@ definitions:
         items:
           type: integer
           format: int32
-        
+  Teacher:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+        example: Agata
+      coursesTaught:
+        type: array
+        description: 'IDs of courses taught by teacher'
+        items:
+          type: integer
+          format: int32
+  TeacherRating:
+    type: object
+    properties:
+      student_id:
+        description: The student giving the rating
+        type: integer
+        format: int32
+      teacher_id:
+        description: The teacher getting rated
+        type: integer
+        format: int32
+      rating:
+        description: The rating the student is giving
+        type: integer
+        format: 0-10
+  Course:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+        example: 'DISYS'
+      coursework:
+        type: integer
+        format: int32
+        example: 20
+  CourseRating:
+    type: object
+    properties:
+      student_id:
+        description: The student giving the rating
+        type: integer
+        format: int32
+      course_id:
+        description: The course getting rated
+        type: integer
+        format: int32
+      rating:
+        description: The rating the student is giving
+        type: integer
+        format: 0-10
