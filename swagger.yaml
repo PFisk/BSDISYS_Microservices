@@ -137,7 +137,7 @@ paths:
     get:
       tags:
       - "student"
-      summary: "Find satisfaction ratings for all courses"
+      summary: "Finds all of a students satisfaction ratings for courses"
       description: ""
       operationId: "getUserCourseRatings"
       produces: 
@@ -163,7 +163,7 @@ paths:
     get:
       tags:
       - "student"
-      summary: "Find satisfaction ratings for all teachers"
+      summary: "Finds all of a students satisfaction ratings for teachers"
       description: ""
       operationId: "getUserTeacherRatings"
       produces: 
@@ -467,6 +467,141 @@ paths:
           description: Invalid input
         "404":
           description: Course with id not found
+  /course/{course_id}/average_rating:
+    get:
+      tags:
+      - "course ratings"
+      summary: "Gets the average rating of a course"
+      parameters:
+      - name: "course_id"
+        in: "path"
+        description: "ID of the course"
+        required: true
+        type: integer
+        format: "int64"
+      responses:
+        "200":
+          description: "Course found!"
+          schema:
+            type: number
+            format: 0-10
+            example: 7.45
+        "400":
+          description: "Invalid ID"
+        "404":
+          description: "ID not found"
+  /course/{course_id}/ratings:
+    get:
+      tags:
+      - "course ratings"
+      summary: "Gets the ratings of a course"
+      parameters:
+      - name: "course_id"
+        in: "path"
+        description: "ID of course"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Course found!"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/CourseRating"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Teacher not found"
+    post:
+      tags:
+      - "course ratings"
+      summary: "Add a rating to a course"
+      parameters:
+      - name: "course_id"
+        in: "path"
+        description: "ID of the course"
+        required: true
+        type: integer
+        format: "int64"
+      - name: "rating"
+        in: "body"
+        description: "Rating to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/CourseRating"
+      responses:
+        "405":
+          description: "Invalid input"
+    put:
+      tags:
+      - "course ratings"
+      summary: "Modify an existing rating of a course"
+      parameters:
+      - name: "course_id"
+        in: "path"
+        description: "ID of the course"
+        required: true
+        type: integer
+        format: "int64"
+      - name: "rating"
+        in: "body"
+        description: "Rating to be modified"
+        required: true
+        schema:
+          $ref: "#/definitions/CourseRating"
+      responses:
+        "405":
+          description: "Invalid input"
+  /course/{course_id}/ratings/{rating_id}:
+    get:
+      tags:
+      - "course ratings"
+      summary: "Gets the rating of a course"
+      parameters:
+      - name: "course_id"
+        in: "path"
+        description: "ID of course"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "rating_id"
+        in: "path"
+        description: "ID of rating"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Rating found!"
+          schema:
+            $ref: "#/definitions/CourseRating"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Course or Rating not found"
+    delete:
+      tags:
+      - "course ratings"
+      summary: "Removes the rating of a course"
+      parameters:
+      - name: "course_id"
+        in: "path"
+        description: "ID of course"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "rating_id"
+        in: "path"
+        description: "ID of rating"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Course or Rating not found"
           
 definitions:
   Student:
@@ -484,6 +619,20 @@ definitions:
         items:
           type: integer
           format: int32
+        example:
+        - 2
+        - 4
+      cpr:
+        type: string
+        format: "DDMMYYXXXX"
+      email:
+        type: string
+        format: email
+        example: "jodo@itu.dk"
+      phone:
+        type: string
+        format: phone_nr
+        example: "48 48 48 48"
   Teacher:
     type: object
     properties:
@@ -499,6 +648,20 @@ definitions:
         items:
           type: integer
           format: int32
+        example:
+        - 2
+        - 4
+      cpr:
+        type: string
+        format: "DDMMYYXXXX"
+      email:
+        type: string
+        format: email
+        example: "agata@itu.dk"
+      phone:
+        type: string
+        format: phone_nr
+        example: "48 48 48 48"
   TeacherRating:
     type: object
     properties:
@@ -523,12 +686,17 @@ definitions:
       name:
         type: string
         example: 'DISYS'
+      description:
+        type: string
+        example: "Learn about distributed systems and concurrency!"
       teachers:
         type: array
         description: The IDs of the teachers teaching this course.
         items:
           type: integer
           format: int32
+        example:
+        - 0
       workload:
         type: number
         format: float
