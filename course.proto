@@ -1,0 +1,17 @@
+syntax = "proto3";
+package course_package;
+
+option go_package = "github.com/PFisk/BSDISYS_Microservices";
+
+
+message Course{
+int32 id = 1;
+string name = 2;
+string description = 3;
+repeated int32 teachers = 4;
+float workload = 5;
+}
+
+
+
+
