@@ -698,7 +698,7 @@ definitions:
         example: "Learn about distributed systems and concurrency!"
       teachers:
         type: array
-        description: "The IDs of the teachers teaching this course.""
+        description: "The IDs of the teachers teaching this course."
         items:
           type: integer
           format: int32
