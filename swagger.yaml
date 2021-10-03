@@ -5,12 +5,16 @@ info:
   title: "ITU Super API"
 host: "itusuperapi.swagger.io"
 tags:
- - name: "student"
-   description: "Information about the student goes here"
- - name: "teacher"
-   description: "Information about the teacher goes here"
- - name: "course"
-   description: "Information about the course goes here"
+- name: "student"
+  description: "Information about the student goes here"
+- name: "teacher"
+  description: "Information about the teacher goes here"
+- name: "teacher ratings"
+  description: "Information about student ratings for teachers go here"
+- name: "course"
+  description: "Information about the course goes here"
+- name: "course ratings"
+  description: "Information about student ratings for courses go here"
 schemes: 
  - "http"
  - "https"
@@ -129,22 +133,17 @@ paths:
           description: "Invalid ID supplied"
         "404":
           description: "Student not found"
-  /student/{student_id}/{course_id}:
+  /student/{student_id}/course_ratings:
     get:
       tags:
       - "student"
-      summary: "Find satisfaction ratings for the course"
+      summary: "Find satisfaction ratings for all courses"
       description: ""
-      operationId: "getCourseRating"
+      operationId: "getUserCourseRatings"
       produces: 
       - "application/json"
       parameters:
       - name: "student_id"
-        in: "path"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "course_id"
         in: "path"
         required: true
         type: "integer"
@@ -153,19 +152,20 @@ paths:
         "200":
           description: "Rating found!"
           schema:
-            $ref: "#/definitions/CourseRating"
+            type: array
+            items:
+              $ref: "#/definitions/CourseRating"
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Course not found"
-    put:
+          description: "ID not found"
+  /student/{student_id}/teacher_ratings:
+    get:
       tags:
       - "student"
-      summary: "Update rating for course"
+      summary: "Find satisfaction ratings for all teachers"
       description: ""
-      operationId: "updateRating"
-      consumes: 
-      - "application/json"
+      operationId: "getUserTeacherRatings"
       produces: 
       - "application/json"
       parameters:
@@ -174,23 +174,18 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "course_id"
-        in: "path"
-        required: true
-        type: "integer"
-        format: "int64"
-      - in: "body"
-        name: "body"
-        description: "Updated course rating"
-        required: true
-        schema:
-          $ref: "#/definitions/CourseRating"
       responses:
+        "200":
+          description: "Rating found!"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/CourseRating"
         "400":
           description: "Invalid ID supplied"
         "404":
-          description: "Course not found"
-      
+          description: "ID not found"
+          
   /teacher:
     post:
       tags:
@@ -261,6 +256,141 @@ paths:
           description: "Invalid ID supplied"
         "404":
           description: "Teacher not found"
+  /teacher/{teacher_id}/average_rating:
+    get:
+      tags:
+      - "teacher ratings"
+      summary: "Get the average rating of a teacher"
+      parameters:
+      - name: "teacher_id"
+        in: "path"
+        description: "ID of teacher to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Teacher found!"
+          schema:
+            type: number
+            format: float
+            example: 8.75
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Teacher not found"
+  /teacher/{teacher_id}/ratings:
+    get:
+      tags:
+      - "teacher ratings"
+      summary: "Gets the rating of a teacher"
+      parameters:
+      - name: "teacher_id"
+        in: "path"
+        description: "ID of teacher"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Teacher found!"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/TeacherRating"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Teacher not found"
+    post:
+      tags:
+      - "teacher ratings"
+      summary: "Add a rating to a teacher"
+      parameters:
+      - name: "teacher_id"
+        in: "path"
+        description: "ID of the teacher"
+        required: true
+        type: integer
+        format: "int64"
+      - name: "rating"
+        in: "body"
+        description: "Rating to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/TeacherRating"
+      responses:
+        "405":
+          description: "Invalid input"
+    put:
+      tags:
+      - "teacher ratings"
+      summary: "Modify an existing rating of a teacher"
+      parameters:
+      - name: "teacher_id"
+        in: "path"
+        description: "ID of the teacher"
+        required: true
+        type: integer
+        format: "int64"
+      - name: "rating"
+        in: "body"
+        description: "Rating to be modified"
+        required: true
+        schema:
+          $ref: "#/definitions/TeacherRating"
+      responses:
+        "405":
+          description: "Invalid input"
+  /teacher/{teacher_id}/ratings/{rating_id}:
+    get:
+      tags:
+      - "teacher ratings"
+      summary: "Gets the rating of a teacher"
+      parameters:
+      - name: "teacher_id"
+        in: "path"
+        description: "ID of teacher"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "rating_id"
+        in: "path"
+        description: "ID of rating"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "Teacher found!"
+          schema:
+            $ref: "#/definitions/TeacherRating"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Teacher or Rating not found"
+    delete:
+      tags:
+      - "teacher ratings"
+      summary: "Removes the rating of a teacher"
+      parameters:
+      - name: "teacher_id"
+        in: "path"
+        description: "ID of teacher"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "rating_id"
+        in: "path"
+        description: "ID of rating"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Teacher or Rating not found"
   /course:
     post:
       tags:
