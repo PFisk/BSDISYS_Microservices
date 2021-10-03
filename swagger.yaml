@@ -666,17 +666,24 @@ definitions:
     type: object
     properties:
       student_id:
-        description: The student giving the rating
+        description: "The student giving the rating"
         type: integer
         format: int32
+        example: 22
       teacher_id:
-        description: The teacher getting rated
+        description: "The teacher getting rated"
         type: integer
         format: int32
+        example: 0
       rating:
-        description: The rating the student is giving
+        description: "The rating the student is giving"
         type: integer
         format: 1-10
+        example: 10
+      comment:
+        description: "A comment a student would like to leave with their rating"
+        type: string
+        example: "By far my favourite teacher! I love coming to her class"
   Course:
     type: object
     properties:
@@ -691,7 +698,7 @@ definitions:
         example: "Learn about distributed systems and concurrency!"
       teachers:
         type: array
-        description: The IDs of the teachers teaching this course.
+        description: "The IDs of the teachers teaching this course.""
         items:
           type: integer
           format: int32
@@ -701,19 +708,26 @@ definitions:
         type: number
         format: float
         example: 7.5
-        description: The ECTS count of the course
+        description: "The ECTS count of the course"
   CourseRating:
     type: object
     properties:
       student_id:
-        description: The student giving the rating
+        description: "The student giving the rating"
         type: integer
         format: int32
+        example: 22
       course_id:
-        description: The course getting rated
+        description: "The course getting rated"
         type: integer
         format: int32
+        example: 0
       rating:
-        description: The rating the student is giving
+        description: "The rating the student is giving"
         type: integer
         format: 1-10
+        example: 9
+      comment:
+        description: "A comment a student could turn in with their rating"
+        type: string
+        example: "Love the class, just wish there was more Agata!"
