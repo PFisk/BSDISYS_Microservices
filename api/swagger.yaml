@@ -1,0 +1,385 @@
+---
+swagger: "2.0"
+info:
+  description: "Test server for ITU Information"
+  version: "1.0"
+  title: "ITU Super API"
+host: "itusuperapi.swagger.io"
+tags:
+- name: "student"
+  description: "Information about the student goes here"
+- name: "teacher"
+  description: "Information about the teacher goes here"
+- name: "course"
+  description: "Information about the course goes here"
+schemes:
+- "http"
+- "https"
+paths:
+  /student:
+    post:
+      tags:
+      - "student"
+      summary: "Add a new student"
+      operationId: "addStudent"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Student object that should be added to the system"
+        required: true
+        schema:
+          $ref: "#/definitions/Student"
+        x-exportParamName: "Body"
+      responses:
+        "405":
+          description: "Invalid input"
+  /student/{student_id}:
+    get:
+      tags:
+      - "student"
+      summary: "Returns information about the student"
+      description: "Returns a student object from its ID"
+      operationId: "getStudentByID"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        description: "ID of student to return"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "StudentId"
+      responses:
+        "200":
+          description: "Student found!"
+          schema:
+            $ref: "#/definitions/Student"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Student not found"
+    delete:
+      tags:
+      - "student"
+      summary: "Deletes a student"
+      description: ""
+      operationId: "deleteStudent"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        description: "Student ID to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "StudentId"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Student not found"
+  /student/{student_id}/workload:
+    get:
+      tags:
+      - "student"
+      summary: "Find workload by student ID"
+      description: ""
+      operationId: "getWorkload"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "StudentId"
+      responses:
+        "200":
+          description: "Workload found!"
+          schema:
+            $ref: "#/definitions/Student"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Student not found"
+  /student/{student_id}/{course_id}:
+    get:
+      tags:
+      - "student"
+      summary: "Find satisfaction ratings for the course"
+      description: ""
+      operationId: "getCourseRating"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "StudentId"
+      - name: "course_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "CourseId"
+      responses:
+        "200":
+          description: "Rating found!"
+          schema:
+            $ref: "#/definitions/CourseRating"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Course not found"
+    put:
+      tags:
+      - "student"
+      summary: "Update rating for course"
+      description: ""
+      operationId: "updateRating"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "StudentId"
+      - name: "course_id"
+        in: "path"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "CourseId"
+      - in: "body"
+        name: "body"
+        description: "Updated course rating"
+        required: true
+        schema:
+          $ref: "#/definitions/CourseRating"
+        x-exportParamName: "Body"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Course not found"
+  /teacher:
+    post:
+      tags:
+      - "teacher"
+      summary: "Add a new teacher"
+      parameters: []
+      responses:
+        "405":
+          description: "Invalid input"
+  /teacher/{teacher_id}:
+    get:
+      tags:
+      - "teacher"
+      summary: "Find teacher by ID"
+      parameters:
+      - name: "teacher_id"
+        in: "path"
+        description: "ID of teacher to return"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "TeacherId"
+      responses:
+        "200":
+          description: "Teacher found!"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Teacher not found"
+  /course:
+    post:
+      tags:
+      - "course"
+      summary: "Add a new course"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "The course to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Course"
+        x-exportParamName: "Body"
+      responses:
+        "201":
+          description: "Success"
+        "400":
+          description: "Invalid input"
+    put:
+      tags:
+      - "course"
+      summary: "Modify an existing course"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "The changes to be made"
+        required: true
+        schema:
+          $ref: "#/definitions/Course"
+        x-exportParamName: "Body"
+      responses:
+        "201":
+          description: "Changed"
+        "400":
+          description: "Invalid input"
+        "404":
+          description: "Course with id not found"
+  /course/{course_id}:
+    get:
+      tags:
+      - "course"
+      summary: "Find course by ID"
+      parameters:
+      - name: "course_id"
+        in: "path"
+        description: "ID of course to return"
+        required: true
+        type: "integer"
+        format: "int64"
+        x-exportParamName: "CourseId"
+      responses:
+        "200":
+          description: "Course found!"
+          schema:
+            $ref: "#/definitions/Course"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Course not found"
+    delete:
+      tags:
+      - "course"
+      summary: ""
+      parameters:
+      - name: "course_id"
+        in: "path"
+        description: "id of the course to remove"
+        required: true
+        type: "integer"
+        format: "int32"
+        x-exportParamName: "CourseId"
+      responses:
+        "201":
+          description: "Success"
+        "400":
+          description: "Invalid input"
+        "404":
+          description: "Course with id not found"
+definitions:
+  Student:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"
+        example: "John Doe"
+      courses:
+        type: "array"
+        description: "IDs of courses taken by student"
+        items:
+          type: "integer"
+          format: "int32"
+      workload:
+        type: "integer"
+        format: "int32"
+    example:
+      courses:
+      - 6
+      - 6
+      name: "John Doe"
+      workload: 1
+      id: 0
+  Teacher:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"
+        example: "Agata"
+      coursesTaught:
+        type: "array"
+        description: "IDs of courses taught by teacher"
+        items:
+          type: "integer"
+          format: "int32"
+  TeacherRating:
+    type: "object"
+    properties:
+      student_id:
+        type: "integer"
+        format: "int32"
+        description: "The student giving the rating"
+      teacher_id:
+        type: "integer"
+        format: "int32"
+        description: "The teacher getting rated"
+      rating:
+        type: "integer"
+        format: "0-10"
+        description: "The rating the student is giving"
+  Course:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int32"
+      name:
+        type: "string"
+        example: "DISYS"
+      teachers:
+        type: "array"
+        description: "The IDs of the teachers teaching this course."
+        items:
+          type: "integer"
+          format: "int32"
+      coursework:
+        type: "integer"
+        format: "int32"
+        example: 20
+    example:
+      teachers:
+      - 6
+      - 6
+      name: "DISYS"
+      id: 0
+      coursework: 20
+  CourseRating:
+    type: "object"
+    properties:
+      student_id:
+        type: "integer"
+        format: "int32"
+        description: "The student giving the rating"
+      course_id:
+        type: "integer"
+        format: "int32"
+        description: "The course getting rated"
+      rating:
+        type: "integer"
+        format: "0-10"
+        description: "The rating the student is giving"
+    example:
+      course_id: 6
+      rating: 1
+      student_id: 0
